@@ -1,0 +1,127 @@
+
+
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+// Modelo para usuários (administradores)
+model User {
+    id            String    @id @default(cuid())
+    name          String?
+    email         String    @unique
+    emailVerified DateTime?
+    password      String?
+    image         String?
+    role          Role      @default(USER)
+    createdAt     DateTime  @default(now())
+    updatedAt     DateTime  @updatedAt
+
+    @@map("users")
+}
+
+// Modelo para músicas
+model Music {
+    id              String    @id @default(cuid())
+    title           String
+    artist          String
+    artistId        String
+    album           String?
+    genre           String
+    releaseDate     String?
+    duration        String?
+    coverUrl        String?
+    audioUrl        String
+    downloads       Int       @default(0)
+    description     String?
+    postedBy        String?
+    postedAt        DateTime  @default(now())
+    spotifyUrl      String?
+    youtubeUrl      String?
+    appleMusicUrl   String?
+    status          Status    @default(PENDING)
+    submittedBy     String?
+    submittedAt     DateTime  @default(now())
+    reviewedBy      String?
+    reviewedAt      DateTime?
+    rejectionReason String?
+
+    @@map("music")
+}
+
+// Modelo para banners
+model Banner {
+    id          String   @id @default(cuid())
+    title       String
+    imageUrl    String
+    linkUrl     String?
+    position    String   @default("top") // top, middle, bottom
+    order       Int      @default(0)
+    startDate   DateTime @default(now())
+    endDate     DateTime?
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    createdBy   String?
+
+    @@map("banners")
+}
+
+// Modelo para avisos
+model Announcement {
+    id          String   @id @default(cuid())
+    title       String
+    content     String
+    type        AnnouncementType @default(INFO)
+    isActive    Boolean  @default(true)
+    startDate   DateTime @default(now())
+    endDate     DateTime?
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    createdBy   String?
+
+    @@map("announcements")
+}
+
+// Modelo para popups
+model Popup {
+    id          String   @id @default(cuid())
+    title       String
+    content     String
+    imageUrl    String?
+    buttonText  String?
+    buttonUrl   String?
+    showOnce    Boolean  @default(false)
+    startDate   DateTime @default(now())
+    endDate     DateTime?
+    isActive    Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    createdBy   String?
+
+    @@map("popups")
+}
+
+// Enums
+enum Role {
+    USER
+    ADMIN
+    SUPER_ADMIN
+}
+
+enum Status {
+    PENDING
+    APPROVED
+    REJECTED
+}
+
+enum AnnouncementType {
+    INFO
+    WARNING
+    SUCCESS
+    ERROR
+}

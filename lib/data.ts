@@ -1,4 +1,4 @@
-import type { Music } from "./types"
+import type { Music, MusicSubmission } from "./types"
 
 // Mock data
 const musicData: Music[] = [
@@ -431,4 +431,104 @@ export function getRelatedSongs(currentId: string): Music[] {
   return musicData
     .filter((music) => music.id !== currentId && (music.genre === current.genre || music.artist === current.artist))
     .slice(0, 3)
+}
+
+// Funções para gerenciar submissões de músicas
+let pendingSubmissions: Music[] = []
+
+export function submitMusic(submission: MusicSubmission): Promise<Music> {
+  return new Promise((resolve) => {
+    // Simular delay de processamento
+    setTimeout(() => {
+      const now = new Date()
+      const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} às ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+      
+      // Criar nova música com status pendente
+      const newMusic: Music = {
+        id: `pending-${Date.now()}`,
+        title: submission.title,
+        artist: submission.artist,
+        artistId: submission.artist.toLowerCase().replace(/\s+/g, '-'),
+        album: submission.album || '',
+        genre: submission.genre,
+        releaseDate: submission.releaseDate || formattedDate,
+        duration: '0:00', // Será calculado quando o áudio for processado
+        coverUrl: submission.coverUrl || '/placeholder.svg',
+        audioUrl: submission.audioUrl,
+        downloads: 0,
+        description: submission.description,
+        postedBy: submission.submitterName,
+        postedAt: formattedDate,
+        spotifyUrl: submission.spotifyUrl || '',
+        youtubeUrl: submission.youtubeUrl || '',
+        appleMusicUrl: submission.appleMusicUrl || '',
+        status: 'pending',
+        submittedBy: submission.submitterName,
+        submittedAt: formattedDate
+      }
+      
+      // Adicionar à lista de pendentes
+      pendingSubmissions.push(newMusic)
+      
+      resolve(newMusic)
+    }, 1000)
+  })
+}
+
+export function getPendingSubmissions(): Music[] {
+  return pendingSubmissions
+}
+
+export function approveSubmission(id: string): Promise<Music> {
+  return new Promise((resolve, reject) => {
+    const submissionIndex = pendingSubmissions.findIndex(s => s.id === id)
+    
+    if (submissionIndex === -1) {
+      reject(new Error('Submissão não encontrada'))
+      return
+    }
+    
+    const submission = {...pendingSubmissions[submissionIndex]}
+    submission.status = 'approved'
+    
+    const now = new Date()
+    const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} às ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+    
+    submission.reviewedAt = formattedDate
+    submission.reviewedBy = 'Admin'
+    
+    // Remover da lista de pendentes
+    pendingSubmissions = pendingSubmissions.filter(s => s.id !== id)
+    
+    // Adicionar à lista principal de músicas
+    musicData.unshift(submission)
+    
+    resolve(submission)
+  })
+}
+
+export function rejectSubmission(id: string, reason: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const submissionIndex = pendingSubmissions.findIndex(s => s.id === id)
+    
+    if (submissionIndex === -1) {
+      reject(new Error('Submissão não encontrada'))
+      return
+    }
+    
+    const submission = pendingSubmissions[submissionIndex]
+    submission.status = 'rejected'
+    
+    const now = new Date()
+    const formattedDate = `${now.getDate().toString().padStart(2, '0')}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getFullYear()} às ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`
+    
+    submission.reviewedAt = formattedDate
+    submission.reviewedBy = 'Admin'
+    submission.rejectionReason = reason
+    
+    // Remover da lista de pendentes
+    pendingSubmissions = pendingSubmissions.filter(s => s.id !== id)
+    
+    resolve()
+  })
 }

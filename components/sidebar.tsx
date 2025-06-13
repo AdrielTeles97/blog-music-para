@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
+import { AdminNav } from "./admin-nav"
 import {
   Home,
   Music,
@@ -14,8 +15,8 @@ import {
   Download,
   History,
   Clock,
-  Settings,
   HelpCircle,
+  Upload,
 } from "lucide-react"
 
 const mainNavItems = [
@@ -24,6 +25,7 @@ const mainNavItems = [
   { icon: Mic2, label: "Artistas", href: "/artistas" },
   { icon: ListMusic, label: "Playlists", href: "/playlists" },
   { icon: Radio, label: "Rádios", href: "/radios" },
+  { icon: Upload, label: "Enviar Música", href: "/enviar" },
 ]
 
 const libraryItems = [
@@ -35,7 +37,6 @@ const libraryItems = [
 ]
 
 const otherItems = [
-  { icon: Settings, label: "Configurações", href: "/configuracoes" },
   { icon: HelpCircle, label: "Ajuda", href: "/ajuda" },
 ]
 
@@ -44,65 +45,68 @@ export function Sidebar() {
 
   return (
     <div className="hidden md:block w-64 border-r bg-background overflow-y-auto h-[calc(100vh-3.5rem)]">
-      <div className="py-4">
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Navegação</h2>
-          <div className="space-y-1">
-            {mainNavItems.map((item) => (
+      <div className="flex flex-col gap-2 p-4">
+        <div>
+          <h3 className="text-sm font-medium text-muted-foreground mb-2">Menu</h3>
+          <nav className="space-y-1">
+            {mainNavItems.map((item, index) => (
               <Link
-                key={item.href}
+                key={index}
                 href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
-                  activeItem === item.href ? "bg-accent text-accent-foreground" : "transparent",
-                )}
                 onClick={() => setActiveItem(item.href)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent rounded-md",
+                  activeItem === item.href ? "bg-accent" : "transparent"
+                )}
               >
                 <item.icon className="h-4 w-4" />
-                {item.label}
+                <span>{item.label}</span>
               </Link>
             ))}
-          </div>
+          </nav>
         </div>
 
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Sua Biblioteca</h2>
-          <div className="space-y-1">
-            {libraryItems.map((item) => (
+        <div className="py-2">
+          <h3 className="text-sm font-medium text-muted-foreground mb-2">Biblioteca</h3>
+          <nav className="space-y-1">
+            {libraryItems.map((item, index) => (
               <Link
-                key={item.href}
+                key={index}
                 href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
-                  activeItem === item.href ? "bg-accent text-accent-foreground" : "transparent",
-                )}
                 onClick={() => setActiveItem(item.href)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent rounded-md",
+                  activeItem === item.href ? "bg-accent" : "transparent"
+                )}
               >
                 <item.icon className="h-4 w-4" />
-                {item.label}
+                <span>{item.label}</span>
               </Link>
             ))}
-          </div>
+          </nav>
         </div>
 
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">Outros</h2>
-          <div className="space-y-1">
-            {otherItems.map((item) => (
+        {/* Componente AdminNav que só aparece para administradores */}
+        <AdminNav />
+
+        <div className="py-2">
+          <h3 className="text-sm font-medium text-muted-foreground mb-2">Outros</h3>
+          <nav className="space-y-1">
+            {otherItems.map((item, index) => (
               <Link
-                key={item.href}
+                key={index}
                 href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors hover:bg-accent hover:text-accent-foreground",
-                  activeItem === item.href ? "bg-accent text-accent-foreground" : "transparent",
-                )}
                 onClick={() => setActiveItem(item.href)}
+                className={cn(
+                  "flex items-center gap-2 px-4 py-2 text-sm hover:bg-accent rounded-md",
+                  activeItem === item.href ? "bg-accent" : "transparent"
+                )}
               >
                 <item.icon className="h-4 w-4" />
-                {item.label}
+                <span>{item.label}</span>
               </Link>
             ))}
-          </div>
+          </nav>
         </div>
       </div>
     </div>
