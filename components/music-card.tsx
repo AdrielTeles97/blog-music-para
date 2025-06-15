@@ -13,12 +13,13 @@ import { identifyPlatform } from "@/lib/audio-url-processor"
 interface MusicCardProps {
   music: Music
   index?: number
-  variant?: "default" | "compact" | "featured"
+  variant?: "default" | "compact" | "featured" | "compact-grid"
 }
 
 export function MusicCard({ music, index, variant = "default" }: MusicCardProps) {
   const isCompact = variant === "compact";
   const isFeatured = variant === "featured";
+  const isCompactGrid = variant === "compact-grid";
   const [isPlaying, setIsPlaying] = useState(false);
   const handlePlay = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -128,6 +129,53 @@ export function MusicCard({ music, index, variant = "default" }: MusicCardProps)
           <div className="flex items-center text-sm text-muted-foreground">
             <Clock className="h-4 w-4 mr-1" />
             <span>{music.duration || "3:45"}</span>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+  if (isCompactGrid) {
+    return (
+      <Card className="overflow-hidden border-none shadow-sm group hover:shadow-md transition-all duration-300 bg-gradient-to-b from-muted/20 to-background h-full flex flex-col">
+        <Link href={`/musica/${music.id}`} className="block flex-shrink-0">
+          <div className="relative aspect-square bg-muted w-full">
+            <Image
+              src={music.coverUrl || "/placeholder.svg"}
+              alt={music.title}
+              fill
+              className="object-cover transition-transform group-hover:scale-105 duration-500"
+              sizes="(max-width: 768px) 50vw, (max-width: 1200px) 25vw, 16vw"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.src = "/placeholder.svg";
+              }}
+            />
+            <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center backdrop-blur-sm">
+              <Button 
+                size="icon" 
+                variant="secondary" 
+                className="rounded-full h-10 w-10 shadow-lg"
+                onClick={handlePlay}
+              >
+                <Play className="h-5 w-5" />
+              </Button>
+            </div>
+          </div>
+        </Link>
+        <CardContent className="p-2 flex-1 flex flex-col justify-between min-h-0">
+          <div className="space-y-1">
+            <Link href={`/musica/${music.id}`} className="font-medium text-sm hover:text-primary line-clamp-2 transition-colors leading-tight">
+              {music.title}
+            </Link>
+            <Link href={`/artista/${music.artistId}`} className="text-xs text-muted-foreground hover:text-primary/80 transition-colors line-clamp-1">
+              {music.artist}
+            </Link>
+          </div>
+          <div className="flex items-center justify-between mt-2">
+            <div className="flex items-center text-xs text-muted-foreground">
+              <Download className="h-3 w-3 mr-1" />
+              {music.downloads}
+            </div>
           </div>
         </CardContent>
       </Card>

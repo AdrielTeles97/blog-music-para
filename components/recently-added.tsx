@@ -68,11 +68,12 @@ export function RecentlyAdded() {
         <p className="text-muted-foreground">Nenhuma música encontrada</p>
       </Card>
     )
-  }
-  return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+  }  return (
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3 auto-rows-fr">
       {recentMusic.slice(0, 6).map((music, index) => (
-        <MusicCard key={music.id} music={music} variant="compact-grid" />
+        <div key={music.id} className="min-h-0">
+          <MusicCard music={music} variant="compact-grid" />
+        </div>
       ))}
     </div>
   )
