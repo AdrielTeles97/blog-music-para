@@ -1,5 +1,3 @@
-
-
 generator client {
     provider = "prisma-client-js"
 }
@@ -104,6 +102,21 @@ model Popup {
     createdBy   String?
 
     @@map("popups")
+}
+
+// Modelo para comentários
+model Comment {
+    id          String   @id @default(cuid())
+    musicId     String
+    music       Music    @relation(fields: [musicId], references: [id], onDelete: Cascade)
+    name        String
+    email       String
+    content     String
+    isApproved  Boolean  @default(true)
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    @@map("comments")
 }
 
 // Enums

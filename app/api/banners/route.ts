@@ -5,26 +5,19 @@ import { prisma } from "@/lib/db/prisma";
 export async function GET() {
     try {
         const now = new Date();
+        console.log("Data atual:", now);
 
-        // Buscar banners ativos
+        // Buscar todos os banners ativos, ignorando temporariamente as restrições de data
         const banners = await prisma.banner.findMany({
             where: {
                 isActive: true,
-                OR: [
-                    {
-                        startDate: { lte: now },
-                        endDate: { gte: now },
-                    },
-                    {
-                        startDate: { lte: now },
-                        endDate: null,
-                    },
-                ],
             },
             orderBy: {
                 order: "asc",
             },
         });
+        
+        console.log("Banners encontrados:", banners);
 
         return NextResponse.json(banners);
     } catch (error: any) {

@@ -47,13 +47,23 @@ export async function POST(req: Request) {
     }
     
     const data = await req.json();
-    
-    // Adicionar campos automáticos
-    data.createdBy = session.user.email;
+      // Validar e converter datas para formato ISO
+    const formattedData = {
+      title: data.title,
+      content: data.content,
+      imageUrl: data.imageUrl,
+      buttonText: data.buttonText,
+      buttonUrl: data.buttonUrl,
+      showOnce: data.showOnce,
+      isActive: data.isActive !== undefined ? data.isActive : true,
+      startDate: data.startDate ? new Date(data.startDate) : new Date(),
+      endDate: data.endDate ? new Date(data.endDate) : null,
+      createdBy: session.user.email
+    };
     
     // Criar popup
     const popup = await prisma.popup.create({
-      data
+      data: formattedData
     });
     
     return NextResponse.json({
