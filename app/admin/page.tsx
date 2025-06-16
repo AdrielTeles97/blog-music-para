@@ -217,23 +217,28 @@ export default function AdminPage() {
                                     </span>
                                 </Button>
                             </Link>
-                                
-                            <Button variant="outline" className="h-auto py-4 flex flex-col items-center">
-                                <span className="text-lg font-medium mb-2">Gerenciar Músicas</span>
-                                <span className="text-xs text-muted-foreground">
-                                    Editar ou remover músicas existentes
-                                </span>
-                            </Button>
+                                  <Link href="/admin/musicas" className="w-full">
+                                <Button variant="outline" className="h-auto py-4 flex flex-col items-center w-full">
+                                    <span className="text-lg font-medium mb-2">Gerenciar Músicas</span>
+                                    <span className="text-xs text-muted-foreground">
+                                        Editar ou remover músicas existentes
+                                    </span>
+                                </Button>
+                            </Link>
 
-                            <Button variant="outline" className="h-auto py-4 flex flex-col items-center">
-                                <span className="text-lg font-medium mb-2">Gerenciar Usuários</span>
-                                <span className="text-xs text-muted-foreground">Ver e gerenciar contas de usuário</span>
-                            </Button>
+                            <Link href="/admin/usuarios" className="w-full">
+                                <Button variant="outline" className="h-auto py-4 flex flex-col items-center w-full">
+                                    <span className="text-lg font-medium mb-2">Gerenciar Usuários</span>
+                                    <span className="text-xs text-muted-foreground">Ver e gerenciar contas de usuário</span>
+                                </Button>
+                            </Link>
 
-                            <Button variant="outline" className="h-auto py-4 flex flex-col items-center">
-                                <span className="text-lg font-medium mb-2">Estatísticas</span>
-                                <span className="text-xs text-muted-foreground">Ver downloads e interações</span>
-                            </Button>
+                            <Link href="/admin/estatisticas" className="w-full">
+                                <Button variant="outline" className="h-auto py-4 flex flex-col items-center w-full">
+                                    <span className="text-lg font-medium mb-2">Estatísticas</span>
+                                    <span className="text-xs text-muted-foreground">Ver downloads e interações</span>
+                                </Button>
+                            </Link>
                         </div>
                     </Card>
                 </div>

@@ -1,12 +1,12 @@
-import { MusicListPaginated } from "@/components/music-list-paginated"
+import { MusicLibrary } from "@/components/music-library"
 import { TopDownloadsEnhanced } from "@/components/top-downloads-enhanced"
-import { RecentlyAdded } from "@/components/recently-added"
+import { CategoriesSection } from "@/components/categories-section"
 import { PageHeader } from "@/components/page-header"
 import { Card } from "@/components/ui/card"
 import BannerSlider from "@/components/banner-slider"
 import Announcements from "@/components/announcements"
 import { Button } from "@/components/ui/button"
-import { ChevronRight, Headphones, TrendingUp, Clock } from "lucide-react"
+import { ChevronRight, TrendingUp, Music2, Clock } from "lucide-react"
 import Link from "next/link"
 
 export default function Home() {
@@ -36,39 +36,16 @@ export default function Home() {
           </div>
         </div>
         
-        {/* Grid principal */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        {/* Grid principal */}        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Coluna principal */}
           <div className="lg:col-span-8">
-            {/* Músicas Recentes */}
-            <section className="mb-10">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  <Clock className="h-5 w-5 mr-2 text-primary" />
-                  <h2 className="text-2xl font-bold">Músicas Recentes</h2>
-                </div>                <Link href="/musicas-recentes">
-                  <Button variant="ghost" size="sm" className="text-sm">
-                    Ver mais
-                    <ChevronRight className="ml-1 h-4 w-4" />
-                  </Button>
-                </Link>
-              </div>
-              <div className="bg-muted/30 rounded-xl p-4">
-                <RecentlyAdded />
-              </div>
-            </section>
-            
-            {/* Biblioteca de Músicas */}
-            <section>
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center">
-                  <Headphones className="h-5 w-5 mr-2 text-primary" />
-                  <h2 className="text-2xl font-bold">Biblioteca de Músicas</h2>
-                </div>
-              </div>
-              <div className="bg-muted/30 rounded-xl p-4">
-                <MusicListPaginated />
-              </div>
+            {/* Biblioteca de Músicas Unificada */}            <section className="mb-10">
+              <MusicLibrary 
+                title="Músicas Recentes" 
+                itemsPerPage={6}
+                showAllLink="/musicas-recentes"
+                variant="list"
+              />
             </section>
           </div>
           
@@ -88,28 +65,8 @@ export default function Home() {
                 </div>
                 <TopDownloadsEnhanced />
               </div>
-            </Card>
-
-            {/* Categorias */}
-            <Card className="overflow-hidden border-none shadow-lg">
-              <div className="bg-gradient-to-r from-muted/50 to-muted/10 p-4">
-                <h2 className="text-xl font-bold mb-4">Categorias</h2>
-                <div className="flex flex-wrap gap-2">
-                  {["Pop", "Rock", "Hip Hop", "Eletrônica", "Jazz", "Clássica", "R&B", "Country", "Indie", "Metal"].map(
-                    (category) => (
-                      <a
-                        key={category}
-                        href={`/category/${category.toLowerCase().replace(" ", "-")}`}
-                        className="px-4 py-1.5 bg-background border border-border hover:border-primary rounded-full text-sm hover:bg-primary/10 transition-colors"
-                      >
-                        {category}
-                      </a>
-                    ),
-                  )}
-                </div>
-              </div>
-            </Card>
-            
+            </Card>            {/* Categorias com dados reais */}
+            <CategoriesSection />
             {/* Banner de anúncios */}
             <Card className="overflow-hidden border-none shadow-lg">
               <div className="h-[250px] relative bg-gradient-to-br from-muted/30 to-muted/5">
